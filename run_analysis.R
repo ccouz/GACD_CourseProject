@@ -4,13 +4,14 @@
 library(dplyr)
 library(data.table)
 
-if (!file.exists("./data")) dir.create("./data")
+#if (!file.exists("./data")) dir.create("./data")
 # Downlaod zip file
-harDataUrl = "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
-download.file(harDataUrl, destfile = "./data/HARDataSet.zip", method="curl")
-unzip("./data/HARDataSet.zip",  exdir = "./data")
+#harDataUrl = "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
+#download.file(harDataUrl, destfile = "./data/HARDataSet.zip", method="curl")
+#unzip("./data/HARDataSet.zip",  exdir = "./data")
 
-harDSDir <- file.path("./data", "UCI HAR Dataset")
+#harDSDir <- file.path("./data", "UCI HAR Dataset")
+harDSDir <- "."
 
 ###############################
 ##  Shared Working datasets  ##
@@ -36,16 +37,16 @@ activity.label = fread(file.path(harDSDir, "activity_labels.txt"), sep=" ", head
 #####################
 
 #load x-test
-x.test = fread(file.path(harDSDir, "test", "X_test.txt"), sep=" ", header = FALSE, 
+x.test = fread(file.path(harDSDir, "X_test.txt"), sep=" ", header = FALSE, 
                col.names = keep.col[,feature],
                select = keep.col[, index])
 
 #load y-test activity
-y.test.activity_id = fread(file.path(harDSDir, "test", "y_test.txt"), sep=" ", header = FALSE, 
+y.test.activity_id = fread(file.path(harDSDir, "y_test.txt"), sep=" ", header = FALSE, 
                col.names = c("activity_id"))
 
 # load subject_test.txt
-test.subject_id = fread(file.path(harDSDir, "test", "subject_test.txt"), sep=" ", header = FALSE, 
+test.subject_id = fread(file.path(harDSDir, "subject_test.txt"), sep=" ", header = FALSE, 
                           col.names = c("subject_id"))
 
 # Add the y-test activity id to  test
@@ -66,16 +67,16 @@ x.test.activity[,set:="TEST"]
 #####################
 
 #load x-train
-x.train = fread(file.path(harDSDir, "train", "X_train.txt"), sep=" ", header = FALSE, 
+x.train = fread(file.path(harDSDir, "X_train.txt"), sep=" ", header = FALSE, 
                col.names = keep.col[,feature],
                select = keep.col[, index])
 
 #load y-train activity
-y.train.activity_id = fread(file.path(harDSDir, "train", "y_train.txt"), sep=" ", header = FALSE, 
+y.train.activity_id = fread(file.path(harDSDir, "y_train.txt"), sep=" ", header = FALSE, 
                            col.names = c("activity_id"))
 
 # load subject_test.txt
-train.subject_id = fread(file.path(harDSDir, "train", "subject_train.txt"), sep=" ", header = FALSE, 
+train.subject_id = fread(file.path(harDSDir, "subject_train.txt"), sep=" ", header = FALSE, 
                         col.names = c("subject_id"))
 
 # Add the y-train activity id to  test
@@ -112,7 +113,7 @@ colnames(test.train.avg.summary) = c("activity","subject_id", paste( keep.featur
 # Sort by Activity and Subject Id
 test.train.avg.summary = arrange(test.train.avg.summary, activity, subject_id)
 
-if (!file.exists("./out")) dir.create("./out")
+#if (!file.exists("./out")) dir.create("./out")
 
-write.table(test.train.avg.summary, file = "./out/test-train-avg-summary.csv", sep=",", col.names = TRUE, row.names = FALSE) 
+write.table(test.train.avg.summary, file = "./test-train-avg-summary.csv.txt", sep=",", col.names = TRUE, row.names = FALSE) 
 
